@@ -18,6 +18,8 @@ class Link extends Model
         'url',
         'description',
         'icon',
+        'icon_type',
+        'icon_url',
         'sort_order',
         'click_count',
         'is_active',
@@ -26,6 +28,8 @@ class Link extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'click_count' => 'integer',
+        'icon_type' => 'string',
+        'icon_url' => 'string',
     ];
 
     public function category(): BelongsTo

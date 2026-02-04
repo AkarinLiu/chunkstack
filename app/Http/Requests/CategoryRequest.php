@@ -19,6 +19,8 @@ class CategoryRequest extends FormRequest
             'description' => 'nullable|string',
             'sort_order' => 'nullable|integer|min:0',
             'icon' => 'nullable|string|max:255',
+            'icon_type' => 'nullable|in:emoji,font-awesome,image',
+            'icon_url' => 'nullable|url|max:500',
             'is_active' => 'nullable|boolean',
         ];
     }
@@ -31,6 +33,8 @@ class CategoryRequest extends FormRequest
             'description' => '描述',
             'sort_order' => '排序',
             'icon' => '图标',
+            'icon_type' => '图标类型',
+            'icon_url' => '图标链接',
             'is_active' => '是否启用',
         ];
     }

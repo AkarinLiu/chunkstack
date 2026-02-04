@@ -16,11 +16,15 @@ class Category extends Model
         'description',
         'sort_order',
         'icon',
+        'icon_type',
+        'icon_url',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'icon_type' => 'string',
+        'icon_url' => 'string',
     ];
 
     public function links(): HasMany

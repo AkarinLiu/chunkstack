@@ -37,7 +37,15 @@
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
-                                <span class="text-xl">{{ $link->icon ?? '🔗' }}</span>
+                                <span class="text-xl">
+                                    @if(($link->icon_type ?? 'emoji') === 'emoji')
+                                        {{ $link->icon ?? '🔗' }}
+                                    @elseif($link->icon_type === 'font-awesome')
+                                        <i class="{{ $link->icon }}"></i>
+                                    @elseif($link->icon_type === 'image')
+                                        <img src="{{ $link->icon_url }}" alt="icon" class="w-6 h-6 object-contain">
+                                    @endif
+                                </span>
                                 <div>
                                     <div class="text-sm font-medium text-gray-900 dark:text-white">
                                         {{ $link->title }}

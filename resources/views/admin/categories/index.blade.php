@@ -36,7 +36,13 @@
                 @foreach($categories as $category)
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td class="px-6 py-4 whitespace-nowrap text-2xl">
-                            {{ $category->icon ?? '📁' }}
+                            @if(($category->icon_type ?? 'emoji') === 'emoji')
+                                {{ $category->icon ?? '📁' }}
+                            @elseif($category->icon_type === 'font-awesome')
+                                <i class="{{ $category->icon }}"></i>
+                            @elseif($category->icon_type === 'image')
+                                <img src="{{ $category->icon_url }}" alt="icon" class="w-6 h-6 object-contain">
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="text-sm font-medium text-gray-900 dark:text-white">

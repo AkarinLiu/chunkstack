@@ -68,8 +68,24 @@
             </div>
 
             <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="icon_type">
+                    图标类型
+                </label>
+                <select
+                    class="shadow border border-gray-300 dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
+                    id="icon_type"
+                    name="icon_type"
+                    onchange="toggleIconFields()"
+                >
+                    <option value="emoji" {{ old('icon_type', 'emoji') === 'emoji' ? 'selected' : '' }}>Emoji / Unicode</option>
+                    <option value="font-awesome" {{ old('icon_type') === 'font-awesome' ? 'selected' : '' }}>Font Awesome</option>
+                    <option value="image" {{ old('icon_type') === 'image' ? 'selected' : '' }}>网站图片</option>
+                </select>
+            </div>
+
+            <div class="mb-4" id="icon_emoji_field">
                 <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="icon">
-                    图标
+                    图标 (Emoji)
                 </label>
                 <input
                     class="shadow appearance-none border border-gray-300 dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
@@ -78,6 +94,35 @@
                     name="icon"
                     value="{{ old('icon') }}"
                     placeholder="如: 📁"
+                >
+            </div>
+
+            <div class="mb-4 hidden" id="icon_fa_field">
+                <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="icon_fa">
+                    Font Awesome 类名
+                </label>
+                <input
+                    class="shadow appearance-none border border-gray-300 dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
+                    id="icon_fa"
+                    type="text"
+                    name="icon"
+                    value="{{ old('icon') }}"
+                    placeholder="如: fa-solid fa-home"
+                >
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">请输入完整的 Font Awesome 类名（如：fa-solid fa-home）</p>
+            </div>
+
+            <div class="mb-4 hidden" id="icon_url_field">
+                <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="icon_url">
+                    图标链接
+                </label>
+                <input
+                    class="shadow appearance-none border border-gray-300 dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
+                    id="icon_url"
+                    type="url"
+                    name="icon_url"
+                    value="{{ old('icon_url') }}"
+                    placeholder="https://example.com/icon.png"
                 >
             </div>
 
@@ -103,4 +148,14 @@
             </div>
         </form>
     </div>
+
+    <script>
+        function toggleIconFields() {
+            const iconType = document.getElementById('icon_type').value;
+            document.getElementById('icon_emoji_field').classList.toggle('hidden', iconType !== 'emoji');
+            document.getElementById('icon_fa_field').classList.toggle('hidden', iconType !== 'font-awesome');
+            document.getElementById('icon_url_field').classList.toggle('hidden', iconType !== 'image');
+        }
+        document.addEventListener('DOMContentLoaded', toggleIconFields);
+    </script>
 </x-admin-layouts.admin>

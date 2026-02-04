@@ -35,7 +35,15 @@
                             class="block bg-white dark:bg-gray-800 rounded-lg p-4 shadow hover:shadow-lg transition"
                         >
                             <div class="flex items-start gap-3">
-                                <span class="text-2xl">{{ $link->icon ?? '🔗' }}</span>
+                                <span class="text-2xl">
+                                    @if(($link->icon_type ?? 'emoji') === 'emoji')
+                                        {{ $link->icon ?? '🔗' }}
+                                    @elseif($link->icon_type === 'font-awesome')
+                                        <i class="{{ $link->icon }}"></i>
+                                    @elseif($link->icon_type === 'image')
+                                        <img src="{{ $link->icon_url }}" alt="icon" class="w-6 h-6 object-contain">
+                                    @endif
+                                </span>
                                 <div class="flex-1 min-w-0">
                                     <h3 class="font-semibold text-gray-900 dark:text-white truncate">
                                         {{ $link->title }}
@@ -66,7 +74,15 @@
             @foreach($categories as $category)
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                        <span>{{ $category->icon ?? '📁' }}</span>
+                        <span>
+                            @if(($category->icon_type ?? 'emoji') === 'emoji')
+                                {{ $category->icon ?? '📁' }}
+                            @elseif($category->icon_type === 'font-awesome')
+                                <i class="{{ $category->icon }}"></i>
+                            @elseif($category->icon_type === 'image')
+                                <img src="{{ $category->icon_url }}" alt="icon" class="w-6 h-6 object-contain">
+                            @endif
+                        </span>
                         {{ $category->name }}
                         @if($category->description)
                             <span class="text-sm font-normal text-gray-600 dark:text-gray-400">
@@ -85,7 +101,15 @@
                                     class="block bg-gray-50 dark:bg-gray-700 rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-gray-600 transition"
                                 >
                                     <div class="flex items-start gap-3">
-                                        <span class="text-xl">{{ $link->icon ?? '🔗' }}</span>
+                                        <span class="text-xl">
+                                            @if(($link->icon_type ?? 'emoji') === 'emoji')
+                                                {{ $link->icon ?? '🔗' }}
+                                            @elseif($link->icon_type === 'font-awesome')
+                                                <i class="{{ $link->icon }}"></i>
+                                            @elseif($link->icon_type === 'image')
+                                                <img src="{{ $link->icon_url }}" alt="icon" class="w-5 h-5 object-contain">
+                                            @endif
+                                        </span>
                                         <div class="flex-1 min-w-0">
                                             <h3 class="font-medium text-gray-900 dark:text-white truncate">
                                                 {{ $link->title }}
