@@ -75,16 +75,20 @@
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white">站点地图设置</h3>
                         
                         <div class="flex items-center">
-                            <input
-                                type="checkbox"
-                                name="site.enable_sitemap"
-                                id="site.enable_sitemap"
-                                value="1"
-                                {{ old('site.enable_sitemap', App\Services\SiteConfigService::enableSitemap()) ? 'checked' : '' }}
-                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-700 rounded"
-                            >
-                            <label for="site.enable_sitemap" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
-                                启用站点地图
+                            <label class="flex items-center cursor-pointer">
+                                <input type="hidden" name="site.enable_sitemap" value="0">
+                                <input
+                                    type="checkbox"
+                                    name="site.enable_sitemap"
+                                    value="1"
+                                    id="sitemap_toggle"
+                                    {{ old('site.enable_sitemap', App\Services\SiteConfigService::enableSitemap()) ? 'checked' : '' }}
+                                    class="sr-only"
+                                >
+                                <div id="sitemap_slot" class="toggle-slot relative w-11 h-6 {{ old('site.enable_sitemap', App\Services\SiteConfigService::enableSitemap()) ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600' }} rounded-full cursor-pointer transition-colors">
+                                    <div id="sitemap_handle" class="toggle-handle absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ease-in-out {{ old('site.enable_sitemap', App\Services\SiteConfigService::enableSitemap()) ? 'translate-x-5' : '' }}"></div>
+                                </div>
+                                <span class="ml-3 text-sm text-gray-700 dark:text-gray-300">启用站点地图</span>
                             </label>
                         </div>
 
@@ -145,4 +149,24 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sitemapCheckbox = document.getElementById('sitemap_toggle');
+            const sitemapSlot = document.getElementById('sitemap_slot');
+            const sitemapHandle = document.getElementById('sitemap_handle');
+
+            sitemapCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    sitemapSlot.classList.remove('bg-gray-300', 'dark:bg-gray-600');
+                    sitemapSlot.classList.add('bg-blue-600');
+                    sitemapHandle.classList.add('translate-x-5');
+                } else {
+                    sitemapSlot.classList.remove('bg-blue-600');
+                    sitemapSlot.classList.add('bg-gray-300', 'dark:bg-gray-600');
+                    sitemapHandle.classList.remove('translate-x-5');
+                }
+            });
+        });
+    </script>
 </x-admin-layouts.admin>

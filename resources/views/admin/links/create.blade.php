@@ -26,7 +26,7 @@
                     <option value="">选择分类</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->icon }} {{ $category->name }}
+                            {{ $category->name }}
                         </option>
                     @endforeach
                 </select>
@@ -168,14 +168,20 @@
             </div>
 
             <div class="mb-6">
-                <label class="flex items-center">
+                <label class="flex items-center cursor-pointer">
+                    <input type="hidden" name="is_active" value="0">
                     <input
                         type="checkbox"
                         name="is_active"
-                        class="form-checkbox h-4 w-4 text-blue-600"
-                        checked
+                        value="1"
+                        id="is_active_toggle"
+                        {{ old('is_active', true) ? 'checked' : '' }}
+                        class="sr-only"
                     >
-                    <span class="ml-2 text-gray-700 dark:text-gray-300">启用</span>
+                    <div id="toggle_slot" class="toggle-slot relative w-11 h-6 bg-blue-600 rounded-full cursor-pointer transition-colors">
+                        <div id="toggle_handle" class="toggle-handle absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ease-in-out translate-x-5"></div>
+                    </div>
+                    <span class="ml-3 text-sm text-gray-700 dark:text-gray-300">启用</span>
                 </label>
             </div>
 
@@ -199,7 +205,22 @@
         }
         document.addEventListener('DOMContentLoaded', function() {
             toggleIconFields();
+            const checkbox = document.getElementById('is_active_toggle');
+            const slot = document.getElementById('toggle_slot');
+            const handle = document.getElementById('toggle_handle');
             document.getElementById('icon_type').addEventListener('change', toggleIconFields);
+
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    slot.classList.remove('bg-gray-300', 'dark:bg-gray-600');
+                    slot.classList.add('bg-blue-600');
+                    handle.classList.add('translate-x-5');
+                } else {
+                    slot.classList.remove('bg-blue-600');
+                    slot.classList.add('bg-gray-300', 'dark:bg-gray-600');
+                    handle.classList.remove('translate-x-5');
+                }
+            });
         });
     </script>
 </x-admin-layouts.admin>
