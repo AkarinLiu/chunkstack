@@ -13,6 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class,
+            'email.confirmation' => \App\Http\Middleware\CheckEmailConfirmation::class,
+        ]);
+
+        $middleware->web([
+            \App\Http\Middleware\CheckEmailConfirmation::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

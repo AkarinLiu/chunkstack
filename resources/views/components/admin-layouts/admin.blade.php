@@ -29,14 +29,32 @@
                             </a>
                         </div>
                     </div>
+                    @auth
                     <div class="flex items-center">
-                        <form action="{{ route('admin.logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
-                                退出
+                        <div class="relative" id="user-menu">
+                            <button id="user-menu-button" class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none">
+                                <span>{{ Auth::user()->name }}</span>
+                                <svg id="user-menu-icon" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
                             </button>
-                        </form>
+                            <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50">
+                                <a href="{{ route('admin.email.change') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    更改邮箱
+                                </a>
+                                <a href="{{ route('admin.password.change') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    修改密码
+                                </a>
+                                <form action="{{ route('admin.logout') }}" method="POST" class="block">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        退出登录
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
+                    @endauth
                 </div>
             </div>
         </nav>
@@ -60,5 +78,26 @@
 
             {{ $slot }}
         </main>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const menuButton = document.getElementById('user-menu-button');
+                const menuDropdown = document.getElementById('user-menu-dropdown');
+                const menuIcon = document.getElementById('user-menu-icon');
+
+                if (menuButton && menuDropdown) {
+                    menuButton.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        menuDropdown.classList.toggle('hidden');
+                        menuIcon.classList.toggle('rotate-180');
+                    });
+
+                    document.addEventListener('click', function() {
+                        menuDropdown.classList.add('hidden');
+                        menuIcon.classList.remove('rotate-180');
+                    });
+                }
+            });
+        </script>
     </body>
 </html>

@@ -52,6 +52,9 @@
                     >
                         登录
                     </button>
+                    <a href="{{ route('admin.password.forgot') }}" class="text-sm text-blue-600 hover:text-blue-800">
+                        忘记密码？
+                    </a>
                 </div>
             </form>
 

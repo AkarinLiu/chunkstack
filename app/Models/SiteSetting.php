@@ -20,8 +20,8 @@ class SiteSetting extends Model
     public static function getValue(string $key, mixed $default = null): mixed
     {
         $setting = static::where('key', $key)->first();
-        
-        if (!$setting) {
+
+        if (! $setting) {
             return $default;
         }
 
@@ -38,7 +38,7 @@ class SiteSetting extends Model
     public static function setValue(string $key, mixed $value, string $type = 'string', ?string $description = null): void
     {
         $setting = static::where('key', $key)->first();
-        
+
         $data = [
             'value' => match ($type) {
                 'boolean' => $value ? '1' : '0',

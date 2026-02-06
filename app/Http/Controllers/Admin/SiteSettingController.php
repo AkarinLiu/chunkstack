@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Services\SiteConfigService;
 use App\Models\SiteSetting;
+use App\Services\SiteConfigService;
+use Illuminate\Http\Request;
 
 class SiteSettingController extends Controller
 {

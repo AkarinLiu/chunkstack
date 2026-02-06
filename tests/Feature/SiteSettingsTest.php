@@ -5,7 +5,7 @@ use App\Services\SiteConfigService;
 
 test('site settings page is accessible to admin users', function () {
     $user = User::factory()->create(['is_admin' => true]);
-    
+
     $this->actingAs($user)
         ->get(route('admin.settings.index'))
         ->assertStatus(200)
@@ -14,7 +14,7 @@ test('site settings page is accessible to admin users', function () {
 
 test('site settings can be updated', function () {
     $user = User::factory()->create(['is_admin' => true]);
-    
+
     $data = [
         'site.name' => '测试网站',
         'site.description' => '这是一个测试网站的描述',
@@ -23,12 +23,12 @@ test('site settings can be updated', function () {
         'site.sitemap_frequency' => 'weekly',
         'site.sitemap_priority' => 0.9,
     ];
-    
+
     $this->actingAs($user)
         ->put(route('admin.settings.update'), $data)
         ->assertRedirect(route('admin.settings.index'))
         ->assertSessionHas('success');
-    
+
     $this->assertEquals('测试网站', SiteConfigService::siteName());
     $this->assertEquals('这是一个测试网站的描述', SiteConfigService::siteDescription());
     $this->assertEquals('https://test.example.com', SiteConfigService::siteUrl());
@@ -39,7 +39,7 @@ test('site settings can be updated', function () {
 
 test('sitemap is accessible when enabled', function () {
     SiteConfigService::set('site.enable_sitemap', true);
-    
+
     $this->get(route('sitemap'))
         ->assertStatus(200)
         ->assertHeader('Content-Type', 'application/xml');
@@ -47,7 +47,7 @@ test('sitemap is accessible when enabled', function () {
 
 test('sitemap returns 404 when disabled', function () {
     SiteConfigService::set('site.enable_sitemap', false);
-    
+
     $this->get(route('sitemap'))
         ->assertStatus(404);
 });

@@ -82,7 +82,7 @@ class SiteConfigService
         ];
 
         foreach ($defaults as $key => $config) {
-            if (!SiteSetting::where('key', $key)->exists()) {
+            if (! SiteSetting::where('key', $key)->exists()) {
                 SiteSetting::create([
                     'key' => $key,
                     'value' => $config['value'],
