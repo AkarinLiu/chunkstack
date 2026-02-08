@@ -25,11 +25,8 @@ Laravel 12 导航网站项目。
 # 安装 PHP 依赖
 composer install
 
-# 安装 Node 依赖
-npm install
-
-# 构建前端资源
-npm run build
+# 生成密钥
+php artisan key:generate
 
 # 运行迁移
 php artisan migrate
