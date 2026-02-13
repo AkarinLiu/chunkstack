@@ -41,7 +41,7 @@
                                     @if(($link->icon_type ?? 'emoji') === 'emoji')
                                         {{ $link->icon ?? '🔗' }}
                                     @elseif($link->icon_type === 'font-awesome')
-                                        <i class="{{ $link->icon }}"></i>
+                                        <i class="{{ $link->icon }} dark:text-white"></i>
                                     @elseif($link->icon_type === 'image')
                                         <img src="{{ $link->icon_url }}" alt="icon" class="w-6 h-6 object-contain">
                                     @endif
@@ -64,7 +64,7 @@
                         <td class="px-6 py-4">
                             <div class="flex flex-wrap gap-1">
                                 @foreach($link->tags as $tag)
-                                    <span class="px-2 py-0.5 text-xs rounded-full" style="background-color: {{ $tag->color }}20; color: {{ $tag->color }}">
+                                    <span class="px-2 py-1 text-sm rounded-full text-white" style="background-color: {{ $tag->color }}">
                                         {{ $tag->name }}
                                     </span>
                                 @endforeach

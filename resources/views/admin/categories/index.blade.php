@@ -39,7 +39,7 @@
                             @if(($category->icon_type ?? 'emoji') === 'emoji')
                                 {{ $category->icon ?? '📁' }}
                             @elseif($category->icon_type === 'font-awesome')
-                                <i class="{{ $category->icon }}"></i>
+                                <i class="{{ $category->icon }} dark:text-white"></i>
                             @elseif($category->icon_type === 'image')
                                 <img src="{{ $category->icon_url }}" alt="icon" class="w-6 h-6 object-contain">
                             @endif

@@ -53,6 +53,13 @@
             word-break: break-all;
             color: #2563eb;
         }
+        .info-box {
+            background-color: #f3f4f6;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -61,7 +68,9 @@
 
         <p>您好，{{ $user->name }}：</p>
 
-        <p>我们收到了您更改邮箱地址的请求。请点击下方的按钮验证您的新邮箱地址：</p>
+        <div class="info-box">
+            <p style="margin: 0;">我们收到了您更改邮箱地址的请求。请点击下方的按钮验证您的新邮箱地址。</p>
+        </div>
 
         <center>
             <a href="{{ route('admin.email.verify', ['token' => $token]) }}" class="button">验证邮箱地址</a>

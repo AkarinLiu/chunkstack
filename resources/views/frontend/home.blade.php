@@ -39,7 +39,7 @@
                                     @if(($link->icon_type ?? 'emoji') === 'emoji')
                                         {{ $link->icon ?? '🔗' }}
                                     @elseif($link->icon_type === 'font-awesome')
-                                        <i class="{{ $link->icon }}"></i>
+                                        <i class="{{ $link->icon }} dark:text-white"></i>
                                     @elseif($link->icon_type === 'image')
                                         <img src="{{ $link->icon_url }}" alt="icon" class="w-6 h-6 object-contain">
                                     @endif
@@ -56,7 +56,7 @@
                                     @if($link->tags->isNotEmpty())
                                         <div class="flex flex-wrap gap-1 mt-2">
                                             @foreach($link->tags as $tag)
-                                                <span class="px-2 py-0.5 text-xs rounded-full" style="background-color: {{ $tag->color }}20; color: {{ $tag->color }}">
+                                                <span class="px-2 py-0.5 text-xs rounded-full text-white" style="background-color: {{ $tag->color }}">
                                                     {{ $tag->name }}
                                                 </span>
                                             @endforeach
@@ -78,7 +78,7 @@
                             @if(($category->icon_type ?? 'emoji') === 'emoji')
                                 {{ $category->icon ?? '📁' }}
                             @elseif($category->icon_type === 'font-awesome')
-                                <i class="{{ $category->icon }}"></i>
+                                <i class="{{ $category->icon }} dark:text-white"></i>
                             @elseif($category->icon_type === 'image')
                                 <img src="{{ $category->icon_url }}" alt="icon" class="w-6 h-6 object-contain">
                             @endif
@@ -105,7 +105,7 @@
                                             @if(($link->icon_type ?? 'emoji') === 'emoji')
                                                 {{ $link->icon ?? '🔗' }}
                                             @elseif($link->icon_type === 'font-awesome')
-                                                <i class="{{ $link->icon }}"></i>
+                                                <i class="{{ $link->icon }} dark:text-white"></i>
                                             @elseif($link->icon_type === 'image')
                                                 <img src="{{ $link->icon_url }}" alt="icon" class="w-5 h-5 object-contain">
                                             @endif
@@ -122,7 +122,7 @@
                                             @if($link->tags->isNotEmpty())
                                                 <div class="flex flex-wrap gap-1 mt-2">
                                                     @foreach($link->tags as $tag)
-                                                        <span class="px-2 py-0.5 text-xs rounded-full" style="background-color: {{ $tag->color }}20; color: {{ $tag->color }}">
+                                                        <span class="px-2 py-0.5 text-xs rounded-full text-white" style="background-color: {{ $tag->color }}">
                                                             {{ $tag->name }}
                                                         </span>
                                                     @endforeach
