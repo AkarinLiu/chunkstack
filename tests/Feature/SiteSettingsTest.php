@@ -4,7 +4,7 @@ use App\Models\User;
 use App\Services\SiteConfigService;
 
 test('site settings page is accessible to admin users', function () {
-    $user = User::factory()->create(['is_admin' => true]);
+    $user = User::factory()->create(['role' => 'admin']);
 
     $this->actingAs($user)
         ->get(route('admin.settings.index'))
@@ -13,7 +13,7 @@ test('site settings page is accessible to admin users', function () {
 });
 
 test('site settings can be updated', function () {
-    $user = User::factory()->create(['is_admin' => true]);
+    $user = User::factory()->create(['role' => 'admin']);
 
     $data = [
         'site.name' => '测试网站',

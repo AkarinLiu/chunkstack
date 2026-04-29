@@ -8,12 +8,20 @@ use App\Http\Controllers\Admin\LinkController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\LinkApiController;
 use App\Http\Controllers\Frontend\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/click/{link}', [HomeController::class, 'click'])->name('click');
+Route::get('/link/{slug}', [HomeController::class, 'show'])->name('link.show');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
+Route::prefix('api')->name('api.')->group(function () {
+    Route::get('/links', [LinkApiController::class, 'index'])->name('links');
+    Route::get('/links/{slug}', [LinkApiController::class, 'show'])->name('links.show');
+    Route::post('/link-views/{slug}', [LinkApiController::class, 'view'])->name('link-views.increment');
+    Route::post('/link-clicks/{slug}', [LinkApiController::class, 'click'])->name('link-clicks.increment');
+});
 
 Route::get('login', function () {
     return redirect()->route('admin.login');

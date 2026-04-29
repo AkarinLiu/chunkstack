@@ -37,11 +37,11 @@ class SitemapController extends Controller
             );
         }
 
-        // 链接页面
+        // 链接详情页面
         $links = Link::where('is_active', true)->get();
         foreach ($links as $link) {
             $sitemap .= $this->generateUrl(
-                route('click', $link),
+                route('link.show', $link->slug ?? $link->id),
                 $link->updated_at,
                 'monthly',
                 0.5

@@ -1,9 +1,11 @@
 <x-admin-layouts.admin>
     @slot('title', '仪表盘')
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-            <div class="text-2xl mb-2">📁</div>
+            <div class="text-2xl mb-2 text-blue-600 dark:text-blue-400">
+                <i class="fa-solid fa-folder"></i>
+            </div>
             <div class="text-3xl font-bold text-gray-900 dark:text-white">
                 {{ $stats['categories'] }}
             </div>
@@ -13,7 +15,9 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-            <div class="text-2xl mb-2">🔗</div>
+            <div class="text-2xl mb-2 text-green-600 dark:text-green-400">
+                <i class="fa-solid fa-link"></i>
+            </div>
             <div class="text-3xl font-bold text-gray-900 dark:text-white">
                 {{ $stats['links'] }}
             </div>
@@ -23,7 +27,9 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-            <div class="text-2xl mb-2">🏷️</div>
+            <div class="text-2xl mb-2 text-purple-600 dark:text-purple-400">
+                <i class="fa-solid fa-tags"></i>
+            </div>
             <div class="text-3xl font-bold text-gray-900 dark:text-white">
                 {{ $stats['tags'] }}
             </div>
@@ -33,12 +39,26 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-            <div class="text-2xl mb-2">👆</div>
+            <div class="text-2xl mb-2 text-orange-600 dark:text-orange-400">
+                <i class="fa-solid fa-eye"></i>
+            </div>
+            <div class="text-3xl font-bold text-gray-900 dark:text-white">
+                {{ $stats['total_page_views'] }}
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                总页面浏览量
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+            <div class="text-2xl mb-2 text-red-600 dark:text-red-400">
+                <i class="fa-solid fa-computer-mouse"></i>
+            </div>
             <div class="text-3xl font-bold text-gray-900 dark:text-white">
                 {{ $stats['total_clicks'] }}
             </div>
             <div class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                总点击数
+                总点击量
             </div>
         </div>
     </div>
