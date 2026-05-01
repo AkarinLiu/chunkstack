@@ -54,7 +54,7 @@
             <LinkGrid v-else :links="sortedResults" @navigate="handleNavigate" />
         </div>
 
-        <div v-else>
+        <div v-else class="space-y-10">
             <div v-if="!sortedCategories.length" class="text-center py-12">
                 <p class="text-gray-600 dark:text-gray-400">暂无分类</p>
             </div>
@@ -62,7 +62,7 @@
             <div
                 v-for="category in sortedCategories"
                 :key="category.id"
-                class="bg-white dark:bg-gray-800 rounded-lg shadow p-6"
+                class="bg-white dark:bg-gray-800/80 dark:border dark:border-gray-700 rounded-lg shadow p-6"
             >
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                     <span v-html="categoryIcon(category)"></span>
@@ -82,7 +82,7 @@
                 <LinkGrid
                     v-else
                     :links="category.active_links"
-                    :bg-class="'bg-gray-50 dark:bg-gray-700'"
+                    :bg-class="'bg-gray-50 dark:bg-gray-900 dark:border-gray-700'"
                     @navigate="handleNavigate"
                 />
             </div>

@@ -5,7 +5,7 @@ Laravel 12 导航网站项目。
 ## 技术栈
 
 - **PHP 8.2+**
-- **Laravel 12**
+- **Laravel 13**
 - **Pest** 测试框架
 - **Laravel Pint** 代码格式化
 - **Vite + Tailwind** 前端构建
@@ -30,6 +30,9 @@ php artisan key:generate
 
 # 运行迁移
 php artisan migrate
+
+# 升级项目
+php artisan upgrade
 ```
 
 ### 开发

@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer group relative"
+        class="bg-white dark:bg-gray-800 dark:border dark:border-gray-600 rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer group relative"
         :class="bgClass"
         @click="$emit('navigate', link.slug || link.id)"
     >
