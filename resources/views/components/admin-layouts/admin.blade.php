@@ -27,6 +27,9 @@
                             <a href="{{ route('admin.tags.index') }}" class="{{ request()->routeIs('admin.tags.*') ? 'text-blue-600' : 'text-gray-700 dark:text-gray-300' }}">
                                 标签
                             </a>
+                            <a href="{{ route('admin.custom-headers.index') }}" class="{{ request()->routeIs('admin.custom-headers.*') ? 'text-blue-600' : 'text-gray-700 dark:text-gray-300' }}">
+                                Head 注入
+                            </a>
                         </div>
                     </div>
                     @auth

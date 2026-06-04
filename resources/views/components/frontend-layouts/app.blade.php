@@ -11,6 +11,8 @@
         @endif
         
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        {!! App\Services\SiteConfigService::renderCustomHeaders() !!}
     </head>
     <body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
         <nav class="bg-white dark:bg-gray-800 shadow-sm">

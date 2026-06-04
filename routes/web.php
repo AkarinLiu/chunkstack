@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CustomHeaderController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Admin\LinkController;
@@ -33,6 +34,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::middleware('admin')->group(function () {
             Route::resource('categories', CategoryController::class);
+            Route::resource('custom-headers', CustomHeaderController::class);
             Route::resource('links', LinkController::class);
             Route::resource('tags', TagController::class);
 

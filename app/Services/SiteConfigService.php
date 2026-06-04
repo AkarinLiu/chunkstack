@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\CustomHeader;
 use App\Models\SiteSetting;
+use Illuminate\Support\Collection;
 
 class SiteConfigService
 {
@@ -44,6 +46,25 @@ class SiteConfigService
     public static function sitemapPriority(): float
     {
         return self::get('site.sitemap_priority', 0.8);
+    }
+
+    public static function activeCustomHeaders(): Collection
+    {
+        return CustomHeader::query()
+            ->active()
+            ->orderBy('sort_order')
+            ->get();
+    }
+
+    public static function renderCustomHeaders(): string
+    {
+        return self::activeCustomHeaders()
+            ->map(function (CustomHeader $header) {
+                return '            <!-- Head 注入: '.$header->name.' -->'."\n"
+                    .'            '.$header->content."\n"
+                    .'            <!-- /Head 注入: '.$header->name.' -->';
+            })
+            ->implode("\n");
     }
 
     public static function initializeDefaults(): void
