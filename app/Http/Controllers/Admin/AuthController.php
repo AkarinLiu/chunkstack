@@ -32,10 +32,21 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            // 如果 email_changed_at 为空，设置为当前时间（兼容现有用户）
             $user = Auth::user();
             if (is_null($user->email_changed_at)) {
                 $user->update(['email_changed_at' => now()]);
+            }
+
+            if ($user->hasTwoFactorEnabled()) {
+                if ($this->hasRememberedDevice($request, $user)) {
+                    return redirect()->intended(route('admin.dashboard'));
+                }
+
+                Auth::logout();
+                $request->session()->put('2fa:user:id', $user->id);
+                $request->session()->put('2fa:remember', $request->boolean('remember'));
+
+                return redirect()->route('admin.2fa.challenge');
             }
 
             return redirect()->intended(route('admin.dashboard'));
@@ -158,5 +169,22 @@ class AuthController extends Controller
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
         return redirect()->route('admin.login')->with('success', '密码重置成功，请使用新密码登录');
+    }
+
+    private function hasRememberedDevice(Request $request, User $user): bool
+    {
+        $cookie = $request->cookie('2fa_remember');
+
+        if (! $cookie || ! $user->two_factor_remember_token) {
+            return false;
+        }
+
+        $parts = explode('|', $cookie, 2);
+
+        if (count($parts) !== 2 || (int) $parts[0] !== $user->id) {
+            return false;
+        }
+
+        return hash('sha256', $parts[1]) === $user->two_factor_remember_token;
     }
 }

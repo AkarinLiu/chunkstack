@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title', '管理后台') - {{ config('app.name', '导航站') }}</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -47,6 +48,9 @@
                                 </a>
                                 <a href="{{ route('admin.password.change') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                                     修改密码
+                                </a>
+                                <a href="{{ route('admin.2fa.setup') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    双重验证
                                 </a>
                                 <form action="{{ route('admin.logout') }}" method="POST" class="block">
                                     @csrf

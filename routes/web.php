@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Admin\LinkController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\TwoFactorController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\LinkApiController;
 use App\Http\Controllers\Frontend\SitemapController;
@@ -70,6 +71,29 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('password/forgot', [AuthController::class, 'sendResetLinkEmail'])->name('password.forgot.submit');
         Route::get('password/reset/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
         Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.reset.submit');
+
+        Route::prefix('2fa')->name('2fa.')->group(function () {
+            Route::get('challenge', [TwoFactorController::class, 'challenge'])->name('challenge');
+            Route::post('verify', [TwoFactorController::class, 'verify'])->name('verify');
+            Route::post('recovery', [TwoFactorController::class, 'recovery'])->name('recovery');
+            Route::post('webauthn/assertion', [TwoFactorController::class, 'assertionOptions'])->name('webauthn.assertion');
+            Route::post('webauthn/verify', [TwoFactorController::class, 'verifyWebAuthn'])->name('webauthn.verify');
+        });
+    });
+
+    Route::middleware('auth')->group(function () {
+        Route::prefix('2fa')->name('2fa.')->group(function () {
+            Route::get('setup', [TwoFactorController::class, 'setup'])->name('setup');
+            Route::post('enable', [TwoFactorController::class, 'enable'])->name('enable');
+            Route::post('confirm-enable', [TwoFactorController::class, 'confirmEnable'])->name('confirm-enable');
+            Route::post('disable', [TwoFactorController::class, 'disable'])->name('disable');
+            Route::post('recovery-codes/regenerate', [TwoFactorController::class, 'regenerateRecoveryCodes'])->name('recovery-codes.regenerate');
+
+            Route::post('webauthn/register/begin', [TwoFactorController::class, 'beginRegister'])->name('webauthn.register.begin');
+            Route::post('webauthn/register/complete', [TwoFactorController::class, 'completeRegister'])->name('webauthn.register.complete');
+            Route::delete('webauthn/credentials/{credential}', [TwoFactorController::class, 'removeCredential'])->name('webauthn.credentials.destroy');
+            Route::put('webauthn/credentials/{credential}', [TwoFactorController::class, 'renameCredential'])->name('webauthn.credentials.update');
+        });
     });
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');

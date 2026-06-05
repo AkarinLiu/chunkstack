@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\CheckEmailConfirmation;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\RequireTwoFactor;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,12 +15,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'admin' => \App\Http\Middleware\IsAdmin::class,
-            'email.confirmation' => \App\Http\Middleware\CheckEmailConfirmation::class,
+            'admin' => IsAdmin::class,
+            'email.confirmation' => CheckEmailConfirmation::class,
+            'two-factor' => RequireTwoFactor::class,
         ]);
 
         $middleware->web([
-            \App\Http\Middleware\CheckEmailConfirmation::class,
+            CheckEmailConfirmation::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

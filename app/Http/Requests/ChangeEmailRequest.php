@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class ChangeEmailRequest extends FormRequest
@@ -41,7 +42,7 @@ class ChangeEmailRequest extends FormRequest
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
-            if (! \Illuminate\Support\Facades\Hash::check($this->current_password, auth()->user()->password)) {
+            if (! Hash::check($this->current_password, auth()->user()->password)) {
                 $validator->errors()->add('current_password', '当前密码不正确');
             }
         });
