@@ -9,11 +9,13 @@ use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use lbuchs\WebAuthn\Binary\ByteBuffer;
@@ -146,6 +148,8 @@ class TwoFactorController extends Controller
         $signature = base64_decode($request->input('response.signature'));
         $credentialId = $request->input('id');
         $credentialIdBase64 = strtr($credentialId, '-_', '+/');
+        // 恢复 base64 padding（浏览器返回的 assertion.id 是 base64url 编码，去掉了尾部 =）
+        $credentialIdBase64 .= str_repeat('=', (4 - strlen($credentialIdBase64) % 4) % 4);
 
         $storedCredential = $user->webauthnCredentials()->where('credential_id', $credentialIdBase64)->first();
 
@@ -248,7 +252,11 @@ class TwoFactorController extends Controller
             return back()->withErrors(['code' => '验证码无效，请重试']);
         }
 
-        $recoveryCodesPlain = $this->generateRecoveryCodes();
+        // 只在尚未生成恢复码时生成（避免覆盖 WebAuthn 注册时已生成的恢复码）
+        $recoveryCodesPlain = [];
+        if ($user->totp_recovery_codes === null) {
+            $recoveryCodesPlain = $this->generateRecoveryCodes();
+        }
 
         $user->update([
             'two_factor_enabled' => true,
@@ -339,7 +347,7 @@ class TwoFactorController extends Controller
                 'public_key' => $data->credentialPublicKey,
                 'attestation_type' => $data->attestationFormat,
                 'transports' => json_encode($request->input('response.transports', [])),
-                'aaguid' => $data->AAGUID,
+                'aaguid' => $this->formatAaguid($data->AAGUID),
                 'name' => $request->input('name', '安全密钥'),
                 'counter' => $data->signatureCounter ?? 0,
             ]);
@@ -356,14 +364,24 @@ class TwoFactorController extends Controller
                 $recoveryCodesPlain = $this->generateRecoveryCodes();
             }
 
+            // 将恢复码 flash 到 session，页面刷新后在网页中显示
+            if (! empty($recoveryCodesPlain)) {
+                session()->flash('recovery_codes', $recoveryCodesPlain);
+                session()->flash('success', '安全密钥注册成功');
+            }
+
             return response()->json([
                 'credential' => $credential,
-                'recovery_codes' => $recoveryCodesPlain,
+                'reload' => true,
             ]);
         } catch (\Exception $e) {
-            $class = get_class($e);
+            Log::error('WebAuthn 注册失败', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'user_id' => $user->id,
+            ]);
 
-            return response()->json(['error' => "注册失败 [{$class}]: {$e->getMessage()}"], 400);
+            return response()->json(['error' => '注册失败 ['.get_class($e).']: '.$e->getMessage()], 400);
         }
     }
 
@@ -407,6 +425,25 @@ class TwoFactorController extends Controller
 
         return redirect()->route('admin.2fa.setup')
             ->with('success', '安全密钥已重命名');
+    }
+
+    /**
+     * 将 16 字节二进制 AAGUID 转为 UUID 格式 (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+     */
+    private function formatAaguid(string $binary): string
+    {
+        if (strlen($binary) < 16) {
+            return '00000000-0000-0000-0000-000000000000';
+        }
+
+        return sprintf(
+            '%s-%s-%s-%s-%s',
+            bin2hex(substr($binary, 0, 4)),
+            bin2hex(substr($binary, 4, 2)),
+            bin2hex(substr($binary, 6, 2)),
+            bin2hex(substr($binary, 8, 2)),
+            bin2hex(substr($binary, 10, 6)),
+        );
     }
 
     private function generateRecoveryCodes(): array

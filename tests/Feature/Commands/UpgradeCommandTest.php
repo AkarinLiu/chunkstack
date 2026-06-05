@@ -8,8 +8,8 @@ test('shows message when already on the latest version', function () {
             'packages' => [
                 'akarinliu/chunkstack' => [
                     [
-                        'version' => 'v1.1.1',
-                        'version_normalized' => '1.1.1.0',
+                        'version' => 'v1.2.1',
+                        'version_normalized' => '1.2.1.0',
                         'dist' => ['url' => 'https://example.com/release.zip'],
                     ],
                 ],
@@ -19,7 +19,7 @@ test('shows message when already on the latest version', function () {
 
     $this->artisan('upgrade')
         ->expectsOutput('Checking for updates...')
-        ->expectsOutput('You are already on the latest version (v1.1.1).')
+        ->expectsOutput('You are already on the latest version (v1.2.1).')
         ->assertExitCode(0);
 });
 
@@ -40,7 +40,7 @@ test('shows message when local version is ahead', function () {
 
     $this->artisan('upgrade')
         ->expectsOutput('Checking for updates...')
-        ->expectsOutput('Your version (v1.1.1) is ahead of the latest published version (v1.0.5).')
+        ->expectsOutput('Your version (v1.2.1) is ahead of the latest published version (v1.0.5).')
         ->assertExitCode(0);
 });
 

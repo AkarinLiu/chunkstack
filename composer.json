@@ -3,7 +3,7 @@
   "name": "akarinliu/chunkstack",
   "type": "project",
   "description": "A Laravel navigation site for managing and organizing links.",
-  "version": "v1.2.0",
+  "version": "v1.2.1",
   "keywords": [
     "laravel",
     "navigation",

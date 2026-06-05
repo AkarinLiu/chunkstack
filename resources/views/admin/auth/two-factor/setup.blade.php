@@ -5,7 +5,12 @@
 
             @if(session('recovery_codes'))
                 <div class="bg-yellow-100 dark:bg-yellow-900 border border-yellow-400 dark:border-yellow-600 text-yellow-700 dark:text-yellow-200 px-4 py-3 rounded mb-4">
-                    <p class="font-bold text-lg mb-2">恢复码</p>
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="font-bold text-lg">恢复码</p>
+                        <button id="download-recovery-codes" class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-yellow-200 dark:bg-yellow-800 hover:bg-yellow-300 dark:hover:bg-yellow-700 rounded transition-colors">
+                            <i class="fa-solid fa-download"></i> 下载恢复码
+                        </button>
+                    </div>
                     <p class="mb-3">请立即保存以下恢复码。每个恢复码只能使用一次，请妥善保管。</p>
                     <div class="bg-white dark:bg-gray-800 rounded p-3 font-mono text-sm">
                         @foreach(session('recovery_codes') as $code)
@@ -14,6 +19,18 @@
                     </div>
                     <p class="mt-3 text-sm">恢复码已显示，关闭此页面后将无法再次查看完整恢复码。</p>
                 </div>
+                <script>
+                    document.getElementById('download-recovery-codes').addEventListener('click', function() {
+                        const codes = {!! Js::from(implode("\n", session('recovery_codes'))) !!};
+                        const blob = new Blob([codes], { type: 'text/plain;charset=utf-8' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'chunkstack-recovery-codes.txt';
+                        a.click();
+                        URL.revokeObjectURL(url);
+                    });
+                </script>
             @endif
 
             <div class="bg-white dark:bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -249,6 +266,10 @@
             if (!webauthnBtn) return;
 
             webauthnBtn.addEventListener('click', async function() {
+                if (!window.isSecureContext) {
+                    alert('WebAuthn/安全密钥需要 HTTPS 连接。请使用 https:// 访问此网站，或在本地开发环境中使用 localhost。');
+                    return;
+                }
                 webauthnBtn.disabled = true;
                 webauthnBtn.textContent = '注册中...';
 
@@ -308,17 +329,7 @@
                         throw new Error(err.error || '注册失败');
                     }
 
-                    const regResult = await completeResponse.json();
-
-                    if (regResult.recovery_codes && regResult.recovery_codes.length > 0) {
-                        const recoveryHtml = regResult.recovery_codes.map(c =>
-                            '<div class="py-1">' + c + '</div>'
-                        ).join('');
-                        const msg = '安全密钥注册成功！\\n\\n恢复码（请立即保存）：\\n\\n' +
-                            regResult.recovery_codes.join('\\n') +
-                            '\\n\\n每个恢复码只能使用一次，请妥善保管。';
-                        alert(msg);
-                    }
+                    await completeResponse.json();
 
                     location.reload();
                 } catch (error) {

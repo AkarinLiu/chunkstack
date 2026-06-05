@@ -27,10 +27,12 @@ class SiteSettingController extends Controller
             'site.enable_sitemap' => 'boolean',
             'site.sitemap_frequency' => 'required|in:always,hourly,daily,weekly,monthly,yearly,never',
             'site.sitemap_priority' => 'required|numeric|min:0|max:1',
+            'site.timezone' => 'required|timezone',
         ]);
 
-        foreach ($validated as $key => $value) {
-            SiteConfigService::set($key, $value);
+        // validated 中的 site 是嵌套数组，需展平为 site.xxx 格式存储
+        foreach ($validated['site'] as $key => $value) {
+            SiteConfigService::set("site.{$key}", $value);
         }
 
         return redirect()->route('admin.settings.index')

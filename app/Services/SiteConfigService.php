@@ -48,6 +48,11 @@ class SiteConfigService
         return self::get('site.sitemap_priority', 0.8);
     }
 
+    public static function timezone(): string
+    {
+        return self::get('site.timezone', 'UTC');
+    }
+
     public static function activeCustomHeaders(): Collection
     {
         return CustomHeader::query()
@@ -99,6 +104,11 @@ class SiteConfigService
                 'value' => 0.8,
                 'type' => 'float',
                 'description' => '站点地图优先级',
+            ],
+            'site.timezone' => [
+                'value' => 'UTC',
+                'type' => 'string',
+                'description' => '站点时区',
             ],
         ];
 

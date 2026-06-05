@@ -158,6 +158,12 @@
             if (!webauthnButton) return;
 
             webauthnButton.addEventListener('click', async function() {
+                if (!window.isSecureContext) {
+                    webauthnError.textContent = 'WebAuthn 需要 HTTPS 连接，请使用 https:// 访问此网站。';
+                    webauthnError.classList.remove('hidden');
+                    return;
+                }
+
                 webauthnButton.disabled = true;
                 webauthnButton.textContent = '正在验证...';
                 webauthnError.classList.add('hidden');

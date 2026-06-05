@@ -19,15 +19,15 @@
 
                     <div class="space-y-4">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white">基本设置</h3>
-                        
+
                         <div>
-                            <label for="site.name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <label for="site_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 网站名称
                             </label>
                             <input
                                 type="text"
-                                name="site.name"
-                                id="site.name"
+                                name="site[name]"
+                                id="site_name"
                                 value="{{ old('site.name', App\Services\SiteConfigService::siteName()) }}"
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-900 dark:text-white sm:text-sm"
                                 required
@@ -38,12 +38,12 @@
                         </div>
 
                         <div>
-                            <label for="site.description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <label for="site_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 网站描述
                             </label>
                             <textarea
-                                name="site.description"
-                                id="site.description"
+                                name="site[description]"
+                                id="site_description"
                                 rows="3"
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-900 dark:text-white sm:text-sm"
                                 required
@@ -54,13 +54,13 @@
                         </div>
 
                         <div>
-                            <label for="site.url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <label for="site_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 网站URL
                             </label>
                             <input
                                 type="url"
-                                name="site.url"
-                                id="site.url"
+                                name="site[url]"
+                                id="site_url"
                                 value="{{ old('site.url', App\Services\SiteConfigService::siteUrl()) }}"
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-900 dark:text-white sm:text-sm"
                                 required
@@ -72,14 +72,63 @@
                     </div>
 
                     <div class="space-y-4">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">区域设置</h3>
+
+                        <div>
+                            <label for="site_timezone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                站点时区
+                            </label>
+                            <select
+                                name="site[timezone]"
+                                id="site_timezone"
+                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-900 dark:text-white sm:text-sm"
+                            >
+                                @php
+                                    $currentTimezone = old('site.timezone', App\Services\SiteConfigService::timezone());
+                                    $timezones = [
+                                        'UTC' => 'UTC',
+                                        'Asia/Shanghai' => '中国标准时间 (UTC+8)',
+                                        'Asia/Tokyo' => '日本标准时间 (UTC+9)',
+                                        'Asia/Seoul' => '韩国标准时间 (UTC+9)',
+                                        'Asia/Singapore' => '新加坡标准时间 (UTC+8)',
+                                        'Asia/Hong_Kong' => '香港标准时间 (UTC+8)',
+                                        'Asia/Taipei' => '台北标准时间 (UTC+8)',
+                                        'Asia/Kolkata' => '印度标准时间 (UTC+5:30)',
+                                        'Asia/Dubai' => '迪拜 (UTC+4)',
+                                        'Asia/Bangkok' => '曼谷 (UTC+7)',
+                                        'Asia/Jakarta' => '雅加达 (UTC+7)',
+                                        'Europe/London' => '伦敦 (UTC+0)',
+                                        'Europe/Paris' => '巴黎 (UTC+1)',
+                                        'Europe/Berlin' => '柏林 (UTC+1)',
+                                        'Europe/Moscow' => '莫斯科 (UTC+3)',
+                                        'America/New_York' => '纽约 (UTC-5)',
+                                        'America/Chicago' => '芝加哥 (UTC-6)',
+                                        'America/Denver' => '丹佛 (UTC-7)',
+                                        'America/Los_Angeles' => '洛杉矶 (UTC-8)',
+                                        'America/Sao_Paulo' => '圣保罗 (UTC-3)',
+                                        'Australia/Sydney' => '悉尼 (UTC+10)',
+                                        'Pacific/Auckland' => '奥克兰 (UTC+12)',
+                                    ];
+                                @endphp
+                                @foreach($timezones as $value => $label)
+                                    <option value="{{ $value }}" {{ $currentTimezone === $value ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @error('site.timezone')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white">站点地图设置</h3>
-                        
+
                         <div class="flex items-center">
                             <label class="flex items-center cursor-pointer">
-                                <input type="hidden" name="site.enable_sitemap" value="0">
+                                <input type="hidden" name="site[enable_sitemap]" value="0">
                                 <input
                                     type="checkbox"
-                                    name="site.enable_sitemap"
+                                    name="site[enable_sitemap]"
                                     value="1"
                                     id="sitemap_toggle"
                                     {{ old('site.enable_sitemap', App\Services\SiteConfigService::enableSitemap()) ? 'checked' : '' }}
@@ -93,12 +142,12 @@
                         </div>
 
                         <div>
-                            <label for="site.sitemap_frequency" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <label for="site_sitemap_frequency" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 更新频率
                             </label>
                             <select
-                                name="site.sitemap_frequency"
-                                id="site.sitemap_frequency"
+                                name="site[sitemap_frequency]"
+                                id="site_sitemap_frequency"
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-900 dark:text-white sm:text-sm"
                             >
                                 <option value="always" {{ old('site.sitemap_frequency', App\Services\SiteConfigService::sitemapFrequency()) === 'always' ? 'selected' : '' }}>总是</option>
@@ -115,13 +164,13 @@
                         </div>
 
                         <div>
-                            <label for="site.sitemap_priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <label for="site_sitemap_priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 优先级 (0.0 - 1.0)
                             </label>
                             <input
                                 type="number"
-                                name="site.sitemap_priority"
-                                id="site.sitemap_priority"
+                                name="site[sitemap_priority]"
+                                id="site_sitemap_priority"
                                 value="{{ old('site.sitemap_priority', App\Services\SiteConfigService::sitemapPriority()) }}"
                                 step="0.1"
                                 min="0"
@@ -156,17 +205,19 @@
             const sitemapSlot = document.getElementById('sitemap_slot');
             const sitemapHandle = document.getElementById('sitemap_handle');
 
-            sitemapCheckbox.addEventListener('change', function() {
-                if (this.checked) {
-                    sitemapSlot.classList.remove('bg-gray-300', 'dark:bg-gray-600');
-                    sitemapSlot.classList.add('bg-blue-600');
-                    sitemapHandle.classList.add('translate-x-5');
-                } else {
-                    sitemapSlot.classList.remove('bg-blue-600');
-                    sitemapSlot.classList.add('bg-gray-300', 'dark:bg-gray-600');
-                    sitemapHandle.classList.remove('translate-x-5');
-                }
-            });
+            if (sitemapCheckbox) {
+                sitemapCheckbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        sitemapSlot.classList.remove('bg-gray-300', 'dark:bg-gray-600');
+                        sitemapSlot.classList.add('bg-blue-600');
+                        sitemapHandle.classList.add('translate-x-5');
+                    } else {
+                        sitemapSlot.classList.remove('bg-blue-600');
+                        sitemapSlot.classList.add('bg-gray-300', 'dark:bg-gray-600');
+                        sitemapHandle.classList.remove('translate-x-5');
+                    }
+                });
+            }
         });
     </script>
 </x-admin-layouts.admin>

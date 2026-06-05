@@ -31,6 +31,9 @@
                             <a href="{{ route('admin.custom-headers.index') }}" class="{{ request()->routeIs('admin.custom-headers.*') ? 'text-blue-600' : 'text-gray-700 dark:text-gray-300' }}">
                                 Head 注入
                             </a>
+                            <a href="{{ route('admin.settings.index') }}" class="{{ request()->routeIs('admin.settings.*') ? 'text-blue-600' : 'text-gray-700 dark:text-gray-300' }}">
+                                设置
+                            </a>
                         </div>
                     </div>
                     @auth

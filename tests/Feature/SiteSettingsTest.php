@@ -16,12 +16,15 @@ test('site settings can be updated', function () {
     $user = User::factory()->create(['role' => 'admin']);
 
     $data = [
-        'site.name' => '测试网站',
-        'site.description' => '这是一个测试网站的描述',
-        'site.url' => 'https://test.example.com',
-        'site.enable_sitemap' => true,
-        'site.sitemap_frequency' => 'weekly',
-        'site.sitemap_priority' => 0.9,
+        'site' => [
+            'name' => '测试网站',
+            'description' => '这是一个测试网站的描述',
+            'url' => 'https://test.example.com',
+            'enable_sitemap' => true,
+            'sitemap_frequency' => 'weekly',
+            'sitemap_priority' => 0.9,
+            'timezone' => 'Asia/Shanghai',
+        ],
     ];
 
     $this->actingAs($user)
